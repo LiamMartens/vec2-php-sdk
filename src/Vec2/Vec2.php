@@ -142,7 +142,7 @@
             if($this->_session_enabled) {
                 $_SESSION['vec2_'.$name] = $value;
             } else if($this->_cookie_enabled) {
-                setcookie('vec2_'.$name, $value, time() + 3600 * 31, '/');
+                setcookie('vec2_'.$name, $value, time() + 3600 * 24, '/');
             }
         }
 
@@ -153,9 +153,9 @@
          * @return mixed
          */
         public function fetch(string $name) {
-            if($this->_session_enabled) {
+            if($this->_session_enabled && isset($_SESSION['vec2_'.$name])) {
                 return $_SESSION['vec2_'.$name];
-            } else if($this->_cookie_enabled) {
+            } else if($this->_cookie_enabled && isset($_SESSION['vec2_'.$name])) {
                 return $_COOKIE['vec2_'.$name];
             }
             return '';
