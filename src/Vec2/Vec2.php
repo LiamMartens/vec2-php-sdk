@@ -158,7 +158,7 @@
             } else if($this->_cookie_enabled) {
                 return $_COOKIE['vec2_'.$name];
             }
-            return null;
+            return '';
         }
 
         /**
