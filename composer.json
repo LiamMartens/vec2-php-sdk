@@ -1,0 +1,26 @@
+{
+    "name": "liammartens/vec2-php-sdk",
+    "type": "library",
+    "description": "PHP SDK for Vec2",
+    "keywords": ["api","vec2", "design", "front-end", "svg"],
+    "homepage": "https://github.com/LiamMartens/vec2-php-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Liam Martens",
+            "email": "liam@freighter.studio",
+            "homepage": "https://freighter.studio",
+            "role": "Developer & Designer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "anlutro/curl": "^1.4",
+        "lcobucci/jwt": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Papi\\": "src/Vec2"
+        }
+    }
+}
