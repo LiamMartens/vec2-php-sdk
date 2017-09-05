@@ -104,7 +104,7 @@
             $this->_url = $url;
             $this->_method = Vec2::GET;
             $this->_files = [];
-            $this->_session_storage = false;
+            $this->_session_enabled = false;
             $this->_cookie_enabled = false;
         }
 
@@ -118,7 +118,7 @@
             if(session_status() == \PHP_SESSION_NONE) {
                 session_start();
             }
-            $this->_session_storage = true;
+            $this->_session_enabled = true;
             return $this;
         }
 
@@ -128,7 +128,7 @@
          * @return Vec2
          */
         public function enableCookieStorage() : Vec2 {
-            $this->_cookie_storage = true;
+            $this->_cookie_enabled = true;
             return $this;
         }
 
@@ -139,9 +139,9 @@
          * @param mixed $value
          */
         public function store(string $name, $value) {
-            if($this->_session_storage) {
+            if($this->_session_enabled) {
                 $_SESSION['vec2_'.$name] = $value;
-            } else if($this->_cookie_storage) {
+            } else if($this->_cookie_enabled) {
                 setcookie('vec2_'.$name, $value, time() + 3600 * 31, '/');
             }
         }
@@ -153,9 +153,9 @@
          * @return mixed
          */
         public function fetch(string $name) {
-            if($this->_session_storage) {
+            if($this->_session_enabled) {
                 return $_SESSION['vec2_'.$name];
-            } else if($this->_cookie_storage) {
+            } else if($this->_cookie_enabled) {
                 return $_COOKIE['vec2_'.$name];
             }
             return null;
