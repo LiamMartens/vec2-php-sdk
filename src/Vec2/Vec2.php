@@ -1,16 +1,16 @@
 <?php
-    namespace Papi\Vec2;
+    namespace Vec2;
     use \Exception;
     use \CURLFile;
 
-    use Papi\Vec2\Objects\Response as R;
-    use Papi\Vec2\Objects\Profile;
-    use Papi\Vec2\Objects\User;
-    use Papi\Vec2\Objects\Vector;
-    use Papi\Vec2\Objects\Tag;
-    use Papi\Vec2\Objects\Customer;
-    use Papi\Vec2\Objects\Sale;
-    use Papi\Vec2\Objects\Payout;
+    use Vec2\Objects\Response as R;
+    use Vec2\Objects\Profile;
+    use Vec2\Objects\User;
+    use Vec2\Objects\Vector;
+    use Vec2\Objects\Tag;
+    use Vec2\Objects\Customer;
+    use Vec2\Objects\Sale;
+    use Vec2\Objects\Payout;
 
     use anlutro\cURL\cURL;
     use anlutro\cURL\Response;
@@ -18,10 +18,8 @@
     use Lcobucci\JWT\Parser;
     use Lcobucci\JWT\Builder;
     use Lcobucci\JWT\Signer\Hmac\Sha256;
-    use Papi\CacheAdapters\CacheAdapterAware;
-    use Papi\CacheAdapters\CacheAdapter;
 
-    class Vec2 extends CacheAdapterAware {
+    class Vec2 {
         const SCOPE_PROFILE = 'profile';
         const SCOPE_USER = 'user';
 

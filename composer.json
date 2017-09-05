@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Papi\\": "src/Vec2"
+            "Vec2\\": "src/Vec2"
         }
     }
 }

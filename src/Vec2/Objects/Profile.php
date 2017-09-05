@@ -1,5 +1,5 @@
 <?php
-    namespace Papi\Vec2\Objects;
+    namespace Vec2\Objects;
     use \DateTime;
     use \DateTimeZone;
     use \JsonSerializable;

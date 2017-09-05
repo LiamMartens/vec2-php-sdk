@@ -1,5 +1,5 @@
 <?php
-    namespace Papi\Vec2\Objects;
+    namespace Vec2\Objects;
     use \ArrayAccess;
     use \Countable;
     use \Iterator;
