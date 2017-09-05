@@ -155,7 +155,7 @@
         public function fetch(string $name) {
             if($this->_session_enabled && isset($_SESSION['vec2_'.$name])) {
                 return $_SESSION['vec2_'.$name];
-            } else if($this->_cookie_enabled && isset($_SESSION['vec2_'.$name])) {
+            } else if($this->_cookie_enabled && isset($_COOKIE['vec2_'.$name])) {
                 return $_COOKIE['vec2_'.$name];
             }
             return '';
