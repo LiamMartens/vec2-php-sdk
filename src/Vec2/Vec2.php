@@ -370,13 +370,48 @@
          * @param string $query The query to search
          * @return R
          */
-        public function search(string $query) : R {
+        public function profileSearch(string $query) : R {
             $url = $this->build([ 'profile', 'search', $query ]);
             $resp = R::from($this->call($url));
             if($resp->status) {
                 $resp->profiles = array_map(function($p) {
                     return Profile::from($p);
                 }, $resp->profiles);
+            }
+            return $resp;
+        }
+
+        /**
+         * Searches for vectors by tag/title
+         * Should only be used with GET
+         *
+         * @param string $query The query to search for
+         * @return R
+         */
+        public function vectorSearch(string $query) : R {
+            $url = $this->build([ 'vector', 'search', $query ]);
+            $resp = R::from($this->call($url));
+            if($resp->status) {
+                $resp->vectors = array_map(function($v) {
+                    return Vector::from($v);
+                }, $resp->vectors);
+            }
+            return $resp;
+        }
+
+        /**
+         * Searches for vectors by tag/title for the current user
+         *
+         * @param string $query The query to search for
+         * @return R
+         */
+        public function userVectorSearch(string $query) : R {
+            $url = $this->build([ 'user', 'vector', 'search', $query ]);
+            $resp = R::from($this->call($url, [], true));
+            if($resp->status) {
+                $resp->vectors = array_map(function($v) {
+                    return Vector::from($v);
+                }, $resp->vectors);
             }
             return $resp;
         }
