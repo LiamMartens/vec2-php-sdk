@@ -3,8 +3,9 @@
     use \ArrayAccess;
     use \Countable;
     use \Iterator;
+    use \JsonSerializable;
 
-    class MessageGroup implements ArrayAccess, Countable, Iterator {
+    class MessageGroup implements ArrayAccess, Countable, Iterator, JsonSerializable {
         /** @var int iterator position */
         protected $_position = 0;
         /** @var array Contains all the messages */
@@ -132,5 +133,12 @@
          */
         public function offsetGet($offset) {
             return $this->offsetExists($offset) ? $this->messages[$offset] : null;
+        }
+
+        /**
+         * Returns a json serializable array
+         */
+        public function jsonSerialize() {
+            return $this->messages;
         }
     }

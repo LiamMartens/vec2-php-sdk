@@ -2,8 +2,9 @@
     namespace Vec2\Objects;
     use \DateTime;
     use \DateTimeZone;
+    use \JsonSerializable;
 
-    class Response {
+    class Response implements JsonSerializable {
         /** @var boolean Whether the respone was a success */
         public $status;
         /** @var DateTime When the API call was executed */
@@ -64,5 +65,17 @@
                 }
             }
             return $r;
+        }
+
+        /**
+         * Returns a json serializable array
+         */
+        public function jsonSerialize() {
+            return [
+                'status' => $this->status,
+                'time' => $this->time->getTimestamp(),
+                'data' => $this->data,
+                'messages' => $this->messages
+            ];
         }
     }
