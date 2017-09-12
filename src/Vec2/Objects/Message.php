@@ -8,7 +8,7 @@
 
         public function __construct(int $code, string $type, string $message) {
             $this->code = $code;
-            $this->type = $type;
+            $this->_type = $type;
             $this->message = $message;
         }
 
@@ -22,6 +22,6 @@
         }
 
         public function __toString() : string {
-            return $this->code.' '.$this->type.' '.$this->message;
+            return $this->code.' '.$this->_type.' '.$this->message;
         }
     }
