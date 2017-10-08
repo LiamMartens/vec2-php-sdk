@@ -482,6 +482,27 @@
         }
 
         /**
+         * Tries to GET the public image for the vector
+         *
+         * @param string $vector
+         * @param array $data
+         * @return R
+         */
+        public function vectorPublic(string $vector) : R {
+            $url = $this->build([ 'vector', 'public', $vector ]);
+            // url built send API request
+            $resp = $this->call($url, [], true);
+            // if array -> no raw data sent
+            if(is_array($resp)) {
+                return R::from($resp);
+            }
+            // raw data sent => vector found and downloaded
+            $response = new R(true);
+            $response->vector = $resp;
+            return $response;
+        }
+
+        /**
          * Fetches the user tags
          *
          * @return R
