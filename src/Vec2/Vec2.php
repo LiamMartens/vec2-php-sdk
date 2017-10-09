@@ -124,7 +124,7 @@
          * @param [callable] $condition
          * @return Vec2
          */
-        public function enableLogFile(string $file, array $log_these = [], $condition = null) : Vec2 {
+        public function enableSqliteLog(string $file, array $log_these = [], $condition = null) : Vec2 {
             $this->_logs[] = new Log($file, $log_these, $condition);
             return $this;
         }

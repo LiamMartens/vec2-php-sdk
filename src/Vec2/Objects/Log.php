@@ -1,5 +1,6 @@
 <?php
     namespace Vec2\Objects;
+    use \PDO;
 
     class Log {
         const RESPONSE = 'response';
@@ -39,42 +40,27 @@
         }
 
         /**
-         * Makes a string at least a certain length and max that same length by
-         * splitting it into newlines
-         *
-         * @param string $value The value to min max
-         * @param int $length The length to reach
-         * @param int $pad Make sure to leave this amount of spaces after (pad length is included in length)
-         * @return string
-         */
-        public function split(string $value, int $length, int $pad = 0) : string {
-            $length -= $pad;
-            if(strlen($value) <= $length) {
-                return str_pad($value, $length).str_repeat(' ', $pad);
-            } else {
-                return preg_replace('/(.{1,'.$length.'})/', '$1'.PHP_EOL, $value).str_repeat(' ', $pad);
-            }
-        }
-
-        /**
          * Writes to the log file
          *
          * @param string $content
          * @return Log
          */
-        public function write(string $content) : Log {
-            $prefix = '';
-            // check filesize
-            if(!is_file($this->_file) || filesize($this->_file)==0) {
-                $prefix = $this->split('DATETIME', 24, 4).$this->split('METHOD', 10, 4).$this->split('URL', 48, 4);
-                foreach($this->_log as $p) {
-                    $prefix.=$this->split(strtoupper($p), 96, 4);
-                }
-                $prefix=trim($prefix).PHP_EOL;
+        public function insert(array $params) : Log {
+            if($db = new PDO('sqlite:'.$this->_file)) {
+                // create table if not exists
+                $db->query('CREATE TABLE IF NOT EXISTS log (
+                    datetime DATETIME,
+                    method VARCHAR(6),
+                    url TEXT,
+                    response TEXT,
+                    data TEXT,
+                    headers TEXT
+                )');
+                // insert
+                $columns = array_keys($params);
+                $q = $db->prepare('INSERT INTO log ('.implode(',', $columns).') VALUES ('.trim(str_repeat('?,',count($columns)), ',').')');
+                $q->execute(array_values($params));
             }
-            $f = fopen($this->_file, 'a');
-            fwrite($f, $prefix.$content);
-            fclose($f);
             return $this;
         }
 
@@ -87,18 +73,19 @@
          * @return Log
          */
         public function log(string $method, string $url, array $params) : Log {
-            $log = $this->split(date('Y-m-d H:i:s'), 24, 4).
-                    $this->split($method, 10, 4).
-                    $this->split($url, 48, 4);
+            $params = [
+                'datetime' => date('Y-m-d H:i:s'),
+                'method' => $method,
+                'url' => $url
+            ];
+            // insert requested parameters
             foreach($this->_log as $p) {
                 if(isset($params[$p])) {
-                    $value = (string)(is_array($params[$p]) ? json_encode($params[$p]) : $params[$p]);
-                    $log .= $this->split($value, 96, 4);
+                    $params[$p] = $params[$p];
                 }
             }
-            // write log entry
-            $this->write(trim($log).PHP_EOL);
-            // return self for chaining
+            // insert log entry
+            $this->insert($params);
             return $this;
         }
     }
