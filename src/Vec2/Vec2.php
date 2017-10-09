@@ -11,6 +11,7 @@
     use Vec2\Objects\Customer;
     use Vec2\Objects\Sale;
     use Vec2\Objects\Payout;
+    use Vec2\Objects\Log;
 
     use anlutro\cURL\cURL;
     use anlutro\cURL\Response;
@@ -27,6 +28,9 @@
         const POST = 'POST';
         const PATCH = 'PATCH';
         const DELETE = 'DELETE';
+
+        /** @var array log paths */
+        protected $_logs;
 
         /** @var boolean Whether session storage is enabled */
         protected $_session_enabled;
@@ -104,8 +108,25 @@
             $this->_url = $url;
             $this->_method = Vec2::GET;
             $this->_files = [];
+            $this->_logs = [];
             $this->_session_enabled = false;
             $this->_cookie_enabled = false;
+        }
+
+        /**
+         * Adds a log path
+         * Can add multiple for logging in multiple files
+         * The condition will be called with following parameters:
+         * METHOD, URL, DATA, AUTH_ENDPOINT FLAG
+         *
+         * @param string $file
+         * @param [array] $logThese
+         * @param [callable] $condition
+         * @return Vec2
+         */
+        public function enableLogFile(string $file, array $log_these = [], $condition = null) : Vec2 {
+            $this->_logs[] = new Log($file, $log_these, $condition);
+            return $this;
         }
 
         /**
@@ -339,6 +360,17 @@
                     return [
                         'status' => false
                     ];
+                }
+            }
+            // put in log files
+            foreach($this->_logs as $log) {
+                if($log->condition($this->_method, $url, $data, $auth_endpoint)) {
+                    // call log
+                    $log->log($this->_method, $url, [
+                        'data' => $data,
+                        'response' => $response->body,
+                        'headers' => $response->headers
+                    ]);
                 }
             }
             if($response->headers['content-type']=='application/json') {
