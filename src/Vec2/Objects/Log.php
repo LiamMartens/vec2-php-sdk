@@ -73,7 +73,7 @@
          * @return Log
          */
         public function log(string $method, string $url, array $params) : Log {
-            $params = [
+            $insert = [
                 'datetime' => date('Y-m-d H:i:s'),
                 'method' => $method,
                 'url' => $url
@@ -82,11 +82,11 @@
             foreach($this->_log as $p) {
                 if(isset($params[$p])) {
                     $value = is_array($params[$p]) ? json_encode($params[$p]) : print_r($params[$p], true);
-                    $params[$p] = $value;
+                    $insert[$p] = $value;
                 }
             }
             // insert log entry
-            $this->insert($params);
+            $this->insert($insert);
             return $this;
         }
     }
