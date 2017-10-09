@@ -34,7 +34,7 @@
          */
         public function condition(string $method, string $url, array $data, bool $auth_endpoint) : bool {
             if(isset($this->_condition) && is_callable($this->_condition)) {
-                return boolval($this->_condition($method, $url, $data, $auth_endpoint));
+                return boolval(($this->_condition)($method, $url, $data, $auth_endpoint));
             }
             return true;
         }
