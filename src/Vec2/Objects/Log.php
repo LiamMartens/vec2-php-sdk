@@ -81,7 +81,8 @@
             // insert requested parameters
             foreach($this->_log as $p) {
                 if(isset($params[$p])) {
-                    $params[$p] = $params[$p];
+                    $value = is_array($params[$p]) ? json_encode($params[$p]) : print_r($params[$p], true);
+                    $params[$p] = $value;
                 }
             }
             // insert log entry
