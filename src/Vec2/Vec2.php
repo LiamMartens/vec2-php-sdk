@@ -498,7 +498,7 @@
          * @return R
          */
         public function vector($vector_or_data, array $data = []) : R {
-            $url_build = [ 'user', 'vector' ];
+            $url_build = $this->_method==Vec2::GET ? [ 'vector' ] : [ 'user', 'vector' ];
             if(is_string($vector_or_data)) {
                 $url_build[] = $vector_or_data;
             }
