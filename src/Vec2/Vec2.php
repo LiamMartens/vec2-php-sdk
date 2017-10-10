@@ -337,9 +337,10 @@
                     ->setHeader('From', $this->_client_id.':'.$this->_key)
                     ->setHeader('Content-Type', 'multipart/form-data');
             // check for auth endpoint
-            if($auth_endpoint && !empty($this->getRefreshToken()) && !empty($this->getAccessToken())) {
+            $refreshToken = $this->getRefreshToken();
+            if($auth_endpoint && !empty($refreshToken) && !empty($this->getAccessToken())) {
                 $jwt = $this->jwt([
-                    'refreshToken' => $this->getRefreshToken(),
+                    'refreshToken' => $refreshToken,
                     'accessToken' => $this->getAccessToken()
                 ]);
                 $req->setHeader('Authorization', 'Bearer '.$jwt);
@@ -352,6 +353,7 @@
                     $token = (new Parser())->parse($token);
                     // try to verify
                     if($token->verify(new Sha256(), $this->_secret)) {
+                        $this->setRefreshToken($refreshToken);
                         $this->setAccessToken($token->getClaim('accessToken'));
                     }
                 } catch(Exception $e) {
