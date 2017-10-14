@@ -489,7 +489,7 @@
         }
 
         /**
-         * Tries to download a vector with GET
+         * Tries to GET vector information
          * Tries to POST one
          * Tries to PATCH one
          *
@@ -504,12 +504,33 @@
             }
             $url = $this->build($url_build);
             // url built, send API request
-            $resp = $this->call($url, is_array($vector_or_data) ? $vector_or_data : $data, true);
-            // if array -> no raw data sent
+            $resp = R::from($this->call($url, is_array($vector_or_data) ? $vector_or_data : $data, true));
+            if($resp->status) {
+                $resp->vector = Vector::from($resp->vector);
+            }
+            return $resp;
+            /*// if array -> no raw data sent
             if(is_array($resp)) {
                 return R::from($resp);
             }
             // raw data sent => vector found and downloaded
+            $response = new R(true);
+            $response->vector = $resp;
+            return $response;*/
+        }
+
+        /**
+         * Tries to GET download a vector
+         */
+        public function vectorDownload(string $vector) : R {
+            $url = $this->build([ 'vector', 'download', $vector ]);
+            // url built send API request
+            $resp = $this->call($url, [], true);
+            // if array -> no raw data sent
+            if(is_array($resp)) {
+                return R::from($resp);
+            }
+            // raw data sent -> vector found and downloaded
             $response = new R(true);
             $response->vector = $resp;
             return $response;
