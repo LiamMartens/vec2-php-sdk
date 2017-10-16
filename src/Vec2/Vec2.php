@@ -36,6 +36,8 @@
         protected $_session_enabled;
         /** @var boolean Whether the cookie storage is enabled */
         protected $_cookie_enabled;
+        /** @var int How long to store cookies */
+        protected $_store_time;
 
         /** @var cURL Contains the cURL client */
         protected $_curl;
@@ -111,6 +113,7 @@
             $this->_logs = [];
             $this->_session_enabled = false;
             $this->_cookie_enabled = false;
+            $this->_store_time = 3600 * 24;
         }
 
         /**
@@ -154,6 +157,19 @@
         }
 
         /**
+         * Sets the cookie store time
+         * 
+         * @param int $time The time in seconds to store cookies
+         * @return Vec2
+         */
+        public function setStoreTime(int $time) : Vec2 {
+            if($time > 0) {
+                $this->_store_time = $time;
+            }
+            return $this;
+        }
+
+        /**
          * Stores a value in an enabled storage
          *
          * @param string $name
@@ -163,7 +179,7 @@
             if($this->_session_enabled) {
                 $_SESSION['vec2_'.$name] = $value;
             } else if($this->_cookie_enabled) {
-                setcookie('vec2_'.$name, $value, time() + 3600 * 24, '/');
+                setcookie('vec2_'.$name, $value, time() + $this->_store_time, '/');
             }
         }
 
@@ -346,6 +362,7 @@
                 $req->setHeader('Authorization', 'Bearer '.$jwt);
             }
             $response = $req->send();
+
             // check for Authorization update
             if($auth_endpoint && isset($response->headers['authorization'])) {
                 $token = preg_replace('/Bearer\s*/', '', $response->headers['authorization']);
