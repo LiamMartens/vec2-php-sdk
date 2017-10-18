@@ -16,6 +16,8 @@
         public $price;
         /** @var array Contains the tags */
         public $tags;
+        /** @var array Contains meta data */
+        public $meta;
         /** @var DateTime Contains the updated at time */
         public $updated_at;
         /** @var DateTime Contains the created at time */
@@ -38,6 +40,7 @@
                 $t['id'] = $t['tag_id'];
                 return Tag::from($t);
             }, isset($data['tags']) ? $data['tags'] : []);
+            $v->meta = isset($data['meta'])&&is_array($data['meta']) ? $data['meta'] : [];
             $v->updated_at = isset($data['updated_at']) ? new DateTime($data['updated_at']) : new DateTime();
             $v->created_at = isset($data['created_at']) ? new DateTime($data['created_at']) : new DateTime();
             return $v;
