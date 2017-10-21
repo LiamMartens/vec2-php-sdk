@@ -29,6 +29,10 @@
         const PATCH = 'PATCH';
         const DELETE = 'DELETE';
 
+        const USERNAME_META_KEY = 'nickname';
+        const FIRSTNAME_META_KEY = 'first_name';
+        const LASTNAME_META_KEY = 'last_name';
+
         /** @var array log paths */
         protected $_logs;
 

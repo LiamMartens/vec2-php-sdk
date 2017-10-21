@@ -1,5 +1,6 @@
 <?php
     namespace Vec2\Objects;
+    use \Vec2\Vec2;
     use \DateTime;
 
     class User extends Profile {
@@ -25,9 +26,9 @@
          public static function from(array $data) : Profile {
             $p = new User();
             $p->user_id = isset($data['sub']) ? $data['sub'] : '';
-            $p->username = isset($data['user_metadata']['username']) ? $data['user_metadata']['username'] : '';
-            $p->first_name = isset($data['user_metadata']['first_name']) ? $data['user_metadata']['first_name'] : '';
-            $p->last_name = isset($data['user_metadata']['last_name']) ? $data['user_metadata']['last_name'] : '';
+            $p->username = isset($data['user_metadata'][Vec2::USERNAME_META_KEY]) ? $data['user_metadata'][Vec2::USERNAME_META_KEY] : '';
+            $p->first_name = isset($data['user_metadata'][Vec2::FIRSTNAME_META_KEY]) ? $data['user_metadata'][Vec2::FIRSTNAME_META_KEY] : '';
+            $p->last_name = isset($data['user_metadata'][Vec2::LASTNAME_META_KEY]) ? $data['user_metadata'][Vec2::LASTNAME_META_KEY] : '';
             $p->email = isset($data['email']) ? $data['email'] : '';
             $p->email_verified = isset($data['email_verified']) ? (intval($data['email_verified'])==1) : 0;
             $p->customer_id = isset($data['user_metadata']['customer_id']) ? $data['user_metadata']['customer_id'] : '';
